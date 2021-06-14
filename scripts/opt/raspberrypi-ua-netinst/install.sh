@@ -97,6 +97,7 @@ variables_reset() {
 	camera_enable=
 	camera_disable_led=
 	use_systemd_services=
+	architecture=
 }
 
 variable_set() {
@@ -173,6 +174,7 @@ variables_set_defaults() {
 	variable_set "camera_enable" "0"
 	variable_set "camera_disable_led" "0"
 	variable_set "use_systemd_services" "0"
+	variable_set "arm64"
 }
 
 led_sos() {
@@ -1610,7 +1612,7 @@ for i in $(seq 1 "${installer_pkg_downloadretries}"); do
 	if [ -n "${mirror_cache}" ]; then
 		export http_proxy="http://${mirror_cache}/"
 	fi
-	eval cdebootstrap-static --arch=armhf "${cdebootstrap_cmdline}" "${release_raspbian}" /rootfs "${mirror}" --keyring=/usr/share/keyrings/raspbian-archive-keyring.gpg 2>&1 | output_filter
+	eval cdebootstrap-static --arch=$architecture "${cdebootstrap_cmdline}" "${release_raspbian}" /rootfs "${mirror}" --keyring=/usr/share/keyrings/raspbian-archive-keyring.gpg 2>&1 | output_filter
 	cdebootstrap_exitcode="${PIPESTATUS[0]}"
 	if [ "${cdebootstrap_exitcode}" -eq 0 ]; then
 		unset http_proxy
